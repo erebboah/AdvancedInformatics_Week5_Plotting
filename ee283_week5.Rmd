@@ -1,0 +1,242 @@
+---
+title: "Advanced Informatics Week 5 lab"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(reticulate)
+library(ggplot2)
+library(ggpubr)
+use_python("/Users/liz/miniconda3/envs/new_env/bin/python",required = T)
+knitr::opts_chunk$set(echo = TRUE)
+mpl = reticulate::import("matplotlib")
+sns = reticulate::import("seaborn")
+```
+
+### Plotting basics in base R
+
+```{r}
+plot(sin)
+```
+
+Change `x` axis label to $\sigma$ and `y` axis label to $\tau$:
+```{r}
+plot(sin, xlab = expression(sigma), ylab = expression(tau))
+```
+
+Change `x` axis label to $\sigma_{s}^2$:
+```{r}
+plot(sin, xlab=expression(sigma[s]^2))
+```
+
+Change line to be red, "dot-dash" style, and 3 times the default thickness:
+```{r}
+plot(sin, col = "red", lty = 4, lwd = 3)
+```
+
+Add title using variable:
+```{r}
+y = 7
+plot(sin, main = bquote(Gamma == .(y)))
+```
+
+Add annotation using variable:
+```{r}
+y = 7
+plot(sin)
+text(0.1, 0.4, bquote(Gamma == .(y)))
+```
+
+Practice saving files:
+```{r}
+pdf(file="ee283_week5.pdf",
+    width = 10, 
+    height = 10)
+y = 7
+par(ps = 18, cex = 1)
+plot(sin)
+text(0.1, 0.4, bquote(Gamma == .(y)))
+dev.off()
+```
+
+```{r}
+tiff(file="ee283_week5.tiff",
+    width = 10, 
+    height = 10, units = "in", res = 500)
+y = 7
+par(ps = 18, cex = 1)
+plot(sin,axes=F)
+axis(2)
+axis(1, cex.axis = 0.5)
+text(0.1, 0.4, bquote(Gamma == .(y)))
+dev.off()
+```
+
+```{r}
+png(file="ee283_week5_72res.png",
+    width = 10, 
+    height = 10, units = "in", res = 72)
+y = 7
+par(ps = 18, cex = 1)
+plot(sin)
+text(0.1, 0.4, bquote(Gamma == .(y)))
+dev.off()
+```
+
+```{r}
+png(file="ee283_week5_300res.png",
+    width = 10, 
+    height = 10, units = "in", res = 300)
+y = 7
+par(ps = 18, cex = 1)
+plot(sin)
+text(0.1, 0.4, bquote(Gamma == .(y)))
+dev.off()
+```
+
+### Plotting basics using ggplot in R
+```{r}
+library(ggplot2)
+data(mtcars)
+p = ggplot(mtcars, aes(x=cyl, y = mpg)) + geom_point()
+p
+```
+
+Change `x` axis label to $\sigma$ and `y` axis label to $\tau$:
+```{r}
+p1 = p + xlab(expression(sigma)) + ylab(expression(tau))
+p1
+```
+
+Change `x` axis label to $\sigma_{s}^2$:
+```{r}
+p2 = p + xlab(expression(sigma[s]^2))
+p2
+```
+
+Change dots to be red, diamond style, and 3 times the default thickness:
+```{r}
+p3 = p + geom_point(color='red', size=3, shape= 18)
+p3
+```
+
+Add title using variable:
+```{r}
+y = 7
+p4 = p + ggtitle(bquote(Gamma == .(y)))
+p4
+```
+
+Add annotation using variable:
+```{r}
+y = 7
+p + annotate("text",label = bquote(Gamma == .(y)), x = 4.5, y = 15)
+```
+
+Use `ggarrange` to display plots side-by-side:
+```{r}
+ggarrange(p1, p2, ncol = 2)
+```
+
+...and as a 2x2 matrix:
+```{r}
+ggarrange(p1, p2, p3, p4, nrow = 2, ncol = 2)
+```
+
+### Plotting basics using Python
+
+```{python}
+import matplotlib.pyplot as plt
+
+f, ax = plt.subplots()
+x = [i for i in range(10)]
+y = [i**2 for i in x]
+ax.plot(x, y);
+ax.set_xlabel('x');
+ax.set_ylabel('y')
+```
+
+Change `x` axis label to $\sigma$ and `y` axis label to $\tau$:
+```{python}
+f, ax = plt.subplots()
+ax.plot(x, y);
+ax.set_xlabel('$\\sigma$');
+ax.set_ylabel('$\\tau$')
+```
+
+Change `x` axis label to $\sigma_{s}^2$:
+```{python}
+f, ax = plt.subplots()
+ax.plot(x, y);
+ax.set_xlabel('$\\sigma{_s}{^2}$');
+ax.set_ylabel('y')
+```
+
+Change line to be red, "dot-dash" style, and 3 times the default thickness:
+```{python}
+f, ax = plt.subplots()
+ax.plot(x, y, color='red', linestyle='-.');
+ax.set_xlabel('x');
+ax.set_ylabel('y')
+```
+
+Add title using variable:
+```{python}
+gamma = 7;
+f, ax = plt.subplots()
+ax.plot(x, y);
+plt.title('$\\Gamma$ = ' + str(gamma));
+ax.set_xlabel('x');
+ax.set_ylabel('y')
+```
+
+Add annotation using variable:
+```{python}
+gamma = 7;
+f, ax = plt.subplots()
+ax.plot(x, y);
+plt.annotate("$\\Gamma$ = " + str(gamma),xy=(2,30));
+ax.set_xlabel('x');
+ax.set_ylabel('y')
+```
+
+Use `subplots` to display plots side-by-side:
+```{python}
+f, (ax1, ax2) = plt.subplots(1, 2)
+ax1.plot(x, y, color='red', linestyle='-.');
+ax2.plot(x, y);
+ax1.set_xlabel('x');
+ax1.set_ylabel('y');
+ax2.set_xlabel('x');
+ax2.set_ylabel('y')
+```
+
+Use `GridSpec` to display plots as a 2x2 matrix:
+```{python}
+import matplotlib.gridspec as gridspec
+fig2 = plt.figure(constrained_layout=True)
+spec2 = gridspec.GridSpec(ncols=2, nrows=2, figure=fig2)
+f2_ax1 = fig2.add_subplot(spec2[0, 0])
+f2_ax2 = fig2.add_subplot(spec2[0, 1])
+f2_ax3 = fig2.add_subplot(spec2[1, 0])
+f2_ax4 = fig2.add_subplot(spec2[1, 1])
+
+f2_ax1.plot(x, y);
+f2_ax1.set_xlabel('$\\sigma$');
+f2_ax1.set_ylabel('$\\tau$');
+
+f2_ax2.plot(x, y);
+f2_ax2.set_xlabel('$\\sigma{_s}{^2}$');
+f2_ax2.set_ylabel('y');
+
+f2_ax3.plot(x, y, color='red', linestyle='-.');
+f2_ax3.set_xlabel('x');
+f2_ax3.set_ylabel('y');
+
+f2_ax4.plot(x, y);
+plt.title('$\\Gamma$ = ' + str(gamma));
+f2_ax4.set_xlabel('x');
+f2_ax4.set_ylabel('y');
+
+plt.show()
+```
