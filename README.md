@@ -1,1 +1,2 @@
-# AdvancedInformatics_Week5_Plotting
+# Advanced Informatics Week 5 Exercises
+See R markdown script and html for plots.
