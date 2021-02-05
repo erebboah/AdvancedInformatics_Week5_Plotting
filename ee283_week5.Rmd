@@ -203,7 +203,7 @@ ax.set_ylabel('y')
 Use `subplots` to display plots side-by-side:
 ```{python}
 f, (ax1, ax2) = plt.subplots(1, 2)
-ax1.plot(x, y, color='red', linestyle='-.');
+ax1.plot(x, y, color='red', linestyle='-.',linewidth=3);
 ax2.plot(x, y);
 ax1.set_xlabel('x');
 ax1.set_ylabel('y');
@@ -229,7 +229,7 @@ f2_ax2.plot(x, y);
 f2_ax2.set_xlabel('$\\sigma{_s}{^2}$');
 f2_ax2.set_ylabel('y');
 
-f2_ax3.plot(x, y, color='red', linestyle='-.');
+f2_ax3.plot(x, y, color='red', linestyle='-.',linewidth=3);
 f2_ax3.set_xlabel('x');
 f2_ax3.set_ylabel('y');
 
